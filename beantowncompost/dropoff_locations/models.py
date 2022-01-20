@@ -9,13 +9,13 @@ class DropoffLocation(models.Model):
     location_address = models.CharField(max_length=1000)
     phone = models.CharField(max_length=500)
     url = models.CharField(max_length=500)
-    x = models.FloatField()
-    y = models.FloatField()
+    x = models.FloatField(default=None)
+    y = models.FloatField(default=None)
     # GeoDjango-specific: a geometry field (MultiPolygonField)
-    point = models.PointField()
+    point = models.PointField(srid=4326, default=None)
     city = models.CharField(max_length=100, default=None)
 
 
     # Returns the string representation of the model.
     def __str__(self):
-        return self.name
+        return self.neighborhood_name
