@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- CSS only -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">    
+    <style>
+        html, body {
+            background-color: #343a40;
+        }
+    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js" integrity="sha512-3P8rXCuGJdNZOnUx/03c1jOTnMn3rP63nBip5gOP2qmUh5YAdVAvFZ1E+QLZZbC1rtMrQb+mah3AfYW11RUrWA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    
+
+    <title>Document</title>
+</head>
+<body>
+    <div class="container-fluid bg-dark">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark ">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">Beantown<br>Compost</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav text-light">
+                <li class="nav-item active">
+                <a class="nav-link" href="#">Find a Compost Drop-off</a>
+                </li>
+                <li class="nav-item">
+                <a class="nav-link" href="#">Submit an Additional Compost Drop-off</a>
+                </li>
+                <li class="nav-item">
+                <a class="nav-link" href="#">Submit a Correction</a>
+                </li>
+                <li class="nav-item">
+                <a class="nav-link" href="#">Vote for a New Bin Location</a>
+                </li>
+                <li class="nav-item">
+                <a class="nav-link" href="#">How It Works</a>
+                </li>
+                <li class="nav-item">
+                <a class="nav-link" href="#">About Tal Zaken</a>
+                </li>
+            </ul>
+            </div>
+        </div>
+      </nav>
+        {% block content %}
+        {% endblock content %}
+    <footer class="bg-dark text-center text-lg-start">
+        <div class="text-center text-light bg-dark p-3">
+          Made with ❤️ by 
+          <a class="text-light" href="http://www.talzaken.com/">Tal Zaken</a>
+        </div>
+      </footer>
+    </div>
+</body>
+    {% block script %} {% endblock script %}
+</html>
