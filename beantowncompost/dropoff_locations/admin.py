@@ -1,3 +1,6 @@
-from django.contrib import admin
+from django.contrib.gis import admin
+from .models import DropoffLocation
 
-# Register your models here.
+@admin.register(DropoffLocation)
+class MyAdmin(admin.GeoModelAdmin):
+    pass
