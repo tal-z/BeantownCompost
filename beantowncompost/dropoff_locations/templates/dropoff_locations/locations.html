@@ -19,4 +19,18 @@ Drop Off Compost
     <div class="map-container">
         {{ map|safe }}
     </div>
+    <table class="table table-striped table-dark table-bordered text-light table-hover table-sm">
+        <thead>
+            <tr><th>Click a Location to Submit a Correction</th></tr></thead>
+        {% for location in locations %}
+            <tr onclick="navigate_to('/correct_location/?id={{ location.id }}')"><td class="col-md-3">{{ location }}</td></tr>
+        {% endfor %}
+    </table>
 {% endblock content %}
+{% block script %}
+<script>
+    function navigate_to(url) {
+        window.location = url;
+    }
+</script>
+{% endblock script %}
