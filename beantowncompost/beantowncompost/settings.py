@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.gis',
     'dropoff_locations',
+    'crispy_forms',
 ]
 
 MIDDLEWARE = [
@@ -135,3 +136,5 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 GDAL_LIBRARY_PATH = r"C:\OSGeo4W\bin\gdal302.dll"
 GEOS_LIBRARY_PATH = r"C:\OSGeo4W\bin\geos_c.dll"
+
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
