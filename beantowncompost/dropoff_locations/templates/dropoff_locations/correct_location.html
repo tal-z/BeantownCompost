@@ -23,12 +23,7 @@ Submit A Correction to the Map
 </div>
 
 <div class="text-light">
-    <form action="/correct_location/" method="post">
-        {% csrf_token %}
-        {{ form|crispy }}
-        <br>
-        <input class="btn btn-primary btn-light" type="submit" value="Submit">
-    </form>
+    {% crispy form %}
 </div>
 {% endblock content %}
 {% block script %} 
@@ -67,5 +62,15 @@ crossorigin=""></script>
             });
 
         }, 100);
+
+    function values_to_placeholders() {
+        {% for field in form %}
+            {% if field.name != 'location_name' %}
+                document.getElementById("id_{{ field.name }}").placeholder = document.getElementById("id_{{ field.name }}").value;
+                document.getElementById("id_{{ field.name }}").value = '';
+            {% endif %}
+        {% endfor %}
+    }
+    values_to_placeholders()
     </script>
 {% endblock script %}
