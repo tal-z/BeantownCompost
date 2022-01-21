@@ -1,6 +1,14 @@
 {% extends 'dropoff_locations/base.html' %}
 {% load crispy_forms_tags %}
-
+{% block extra_style %}
+<style>
+    .map-container {
+        height: 60vh;
+        display: block;
+        overflow: hidden;
+    }
+</style>
+{% endblock extra_style %}
 {% block title %}
 Submit A Correction to the Map
 {% endblock title %}
@@ -9,6 +17,11 @@ Submit A Correction to the Map
 {% endblock header %}
 
 {% block content %}
+<label class="text-light" for="map-container">Click to drop a pin</label><br>
+<div class="map-container" name="map-container">
+    {{ map|safe }}
+</div>
+
 <div class="text-light">
     <form action="/correct_location/" method="post">
         {% csrf_token %}
@@ -17,5 +30,42 @@ Submit A Correction to the Map
         <input class="btn btn-primary btn-light" type="submit" value="Submit">
     </form>
 </div>
-
 {% endblock content %}
+{% block script %} 
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
+crossorigin=""/>
+<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+crossorigin=""></script>
+    <script>
+        const x_label = document.querySelector("#div_id_longitude > label");
+        const x_input = document.querySelector("#id_longitude");
+        const y_label = document.querySelector("#div_id_latitude > label");
+        const y_input = document.querySelector("#id_latitude");
+
+        x_label.style.display = "none";
+        x_input.style.display = "none";
+        y_label.style.display = "none";
+        y_input.style.display = "none";
+
+        setTimeout(() => {
+            
+            let frame = document.getElementsByTagName('iframe')[0];
+            let map = frame.contentWindow['{{ map_id }}']
+            let selectedLocation;
+            let marker;
+            map.on('click', function(e) {
+                selectedLocation = e.latlng;
+                if (marker) {
+                    map.removeLayer(marker);
+                }
+                marker = L.marker(selectedLocation);
+                map.addLayer(marker);
+                x_input.value = selectedLocation['lng'];
+                y_input.value = selectedLocation['lat'];
+            });
+
+        }, 100);
+    </script>
+{% endblock script %}

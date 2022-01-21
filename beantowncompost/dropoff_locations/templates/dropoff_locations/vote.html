@@ -17,24 +17,12 @@ Vote for a Drop Off Location
 Vote for a Drop Off Location
 {% endblock header %}
 {% block content %}
-{% if messages %}
-<ul class="messages">
-    {% for message in messages %}
-    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-    {% endfor %}
-</ul>
-{% endif %}
-    <div class="map-container">
+    <label class="text-light" for="map-container">Click to drop a pin</label><br>
+    <div class="map-container" name="map-container">
         {{ map|safe }}
     </div>
     <div class="text-light">
-        <form action="/vote/" method="post">
-            {% csrf_token %}
-            {{ form|crispy }}
-
-            <br>
-            <input class="btn btn-primary btn-light" type="submit" value="Submit">
-        </form>
+        {% crispy form %}
     </div>
 {% endblock content %}
 {% block script %} 
@@ -45,10 +33,10 @@ crossorigin=""/>
 integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
 crossorigin=""></script>
     <script>
-        const x_label = document.querySelector("#div_id_x > label");
-        const x_input = document.querySelector("#id_x");
-        const y_label = document.querySelector("#div_id_y > label");
-        const y_input = document.querySelector("#id_y");
+        const x_label = document.querySelector("#div_id_longitude > label");
+        const x_input = document.querySelector("#id_longitude");
+        const y_label = document.querySelector("#div_id_latitude > label");
+        const y_input = document.querySelector("#id_latitude");
 
         x_label.style.display = "none";
         x_input.style.display = "none";
@@ -73,5 +61,11 @@ crossorigin=""></script>
             });
 
         }, 100);
+
+        function validate_latlng() {
+            if ((! y_input.value)||(! x_input.value)) {
+                alert('Please click to select a location on the map!')
+            };
+        };
     </script>
 {% endblock script %}

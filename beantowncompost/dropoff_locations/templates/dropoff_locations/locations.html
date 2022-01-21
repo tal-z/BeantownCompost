@@ -1,0 +1,22 @@
+{% extends 'dropoff_locations/base.html' %}
+{% block extra_style %}
+<style>
+    .map-container {
+        height: 60vh;
+        display: block;
+        overflow: hidden;
+    }
+</style>
+{% endblock extra_style %}
+{% block title %}
+Drop Off Compost
+{% endblock title %}
+{% block header %}
+Drop Off Compost
+{% endblock header %}
+
+{% block content %}
+    <div class="map-container">
+        {{ map|safe }}
+    </div>
+{% endblock content %}
