@@ -12,12 +12,13 @@
             background-color: #343a40;
         }
     </style>
+    {% block extra_style %}{% endblock extra_style %}
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js" integrity="sha512-3P8rXCuGJdNZOnUx/03c1jOTnMn3rP63nBip5gOP2qmUh5YAdVAvFZ1E+QLZZbC1rtMrQb+mah3AfYW11RUrWA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
     
 
-    <title>Document</title>
+    <title>{% block title %}Document{% endblock title %}</title>
 </head>
 <body>
     <div class="container-fluid bg-dark">
@@ -30,29 +31,29 @@
             <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav text-light">
                 <li class="nav-item active">
-                <a class="nav-link" href="#">Find a Compost Drop-off</a>
+                <a class="nav-link" href="/dropoff">Find a Compost Drop-off</a>
                 </li>
                 <li class="nav-item">
-                <a class="nav-link" href="#">Submit an Additional Compost Drop-off</a>
+                <a class="nav-link" href="/add_location">Add an Additional Compost Drop-off</a>
                 </li>
                 <li class="nav-item">
-                <a class="nav-link" href="#">Submit a Correction</a>
+                <a class="nav-link" href="#">Submit a Correction to the Map</a>
                 </li>
                 <li class="nav-item">
-                <a class="nav-link" href="#">Vote for a New Bin Location</a>
+                <a class="nav-link" href="/vote">Vote for a New Bin Location</a>
                 </li>
                 <li class="nav-item">
                 <a class="nav-link" href="#">How It Works</a>
-                </li>
-                <li class="nav-item">
-                <a class="nav-link" href="#">About Tal Zaken</a>
                 </li>
             </ul>
             </div>
         </div>
       </nav>
-        {% block content %}
-        {% endblock content %}
+        <h2 class="text-light container-fluid">{% block header %}{% endblock header %}</h2>
+        <div class="container-fluid">
+            {% block content %}
+            {% endblock content %}
+        </div>
     <footer class="bg-dark text-center text-lg-start">
         <div class="text-center text-light bg-dark p-3">
           Made with ❤️ by 

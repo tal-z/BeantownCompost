@@ -1,6 +1,41 @@
 {% extends 'dropoff_locations/base.html' %}
+{% load crispy_forms_tags %}
+
+{% block extra_style %}
+<style>
+    .map-container {
+        height: 60vh;
+        display: block;
+        overflow: hidden;
+    }
+</style>
+{% endblock extra_style %}
+{% block title %}
+Vote for a Drop Off Location
+{% endblock title %}
+{% block header %}
+Vote for a Drop Off Location
+{% endblock header %}
 {% block content %}
+{% if messages %}
+<ul class="messages">
+    {% for message in messages %}
+    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
+    <div class="map-container">
         {{ map|safe }}
+    </div>
+    <div class="text-light">
+        <form action="/vote/" method="post">
+            {% csrf_token %}
+            {{ form|crispy }}
+
+            <br>
+            <input class="btn btn-primary btn-light" type="submit" value="Submit">
+        </form>
+    </div>
 {% endblock content %}
 {% block script %} 
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
@@ -10,18 +45,33 @@ crossorigin=""/>
 integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
 crossorigin=""></script>
     <script>
+        const x_label = document.querySelector("#div_id_x > label");
+        const x_input = document.querySelector("#id_x");
+        const y_label = document.querySelector("#div_id_y > label");
+        const y_input = document.querySelector("#id_y");
+
+        x_label.style.display = "none";
+        x_input.style.display = "none";
+        y_label.style.display = "none";
+        y_input.style.display = "none";
 
         setTimeout(() => {
             
             let frame = document.getElementsByTagName('iframe')[0];
-            //let map = frame.contentWindow.document.getElementById('{{ map_id }}');
             let map = frame.contentWindow['{{ map_id }}']
             let selectedLocation;
-            let marker_count = 0;
+            let marker;
             map.on('click', function(e) {
                 selectedLocation = e.latlng;
-                let marker = L.marker(selectedLocation).addTo(map);
+                if (marker) {
+                    map.removeLayer(marker);
+                }
+                marker = L.marker(selectedLocation);
+                map.addLayer(marker);
+                x_input.value = selectedLocation['lng'];
+                y_input.value = selectedLocation['lat'];
             });
+
         }, 100);
     </script>
 {% endblock script %}

@@ -1,0 +1,21 @@
+{% extends 'dropoff_locations/base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}
+Submit A Correction to the Map
+{% endblock title %}
+{% block header %}
+Submit A Correction to the Map
+{% endblock header %}
+
+{% block content %}
+<div class="text-light">
+    <form action="/correct_location/" method="post">
+        {% csrf_token %}
+        {{ form|crispy }}
+        <br>
+        <input class="btn btn-primary btn-light" type="submit" value="Submit">
+    </form>
+</div>
+
+{% endblock content %}

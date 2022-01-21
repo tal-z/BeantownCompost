@@ -1,0 +1,21 @@
+{% extends 'dropoff_locations/base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}
+Submit An Additional Dropoff Location
+{% endblock title %}
+{% block header %}
+Submit An Additional Dropoff Location
+{% endblock header %}
+
+{% block content %}
+<div class="text-light">
+    <form action="/add_location/" method="post">
+        {% csrf_token %}
+        {{ form|crispy }}
+        <br>
+        <input class="btn btn-primary btn-light" type="submit" value="Submit">
+    </form>
+</div>
+
+{% endblock content %}

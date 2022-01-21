@@ -7,16 +7,17 @@
         overflow: hidden;
     }
 </style>
+<meta http-equiv="refresh" content="5;url=/" />
 {% endblock extra_style %}
 {% block title %}
-Drop Off Compost
+Thank You for {{ action }}!
 {% endblock title %}
 {% block header %}
-Drop Off Compost
 {% endblock header %}
 
 {% block content %}
-    <div class="map-container">
-        {{ map|safe }}
-    </div>
+
+<h1 class="text-light">Thank you</h1>
+<h2 class="text-muted">for {{ action }}!</h2>
+
 {% endblock content %}
