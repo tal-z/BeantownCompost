@@ -23,7 +23,7 @@ def get_map(height='100%'):
                                 f"<b>Address:</b>  {dropoff.location_address}",
                                 f"<b>City:</b>  {dropoff.city}",
                                 f"<b>Phone:</b>  {dropoff.phone}<br>",
-                                f"<b><a target ='_blank' href='{dropoff.url}'>Visit Website</b></a>",
+                                f"<b><a target ='_blank' href='{dropoff.website}'>Visit Website</b></a>",
                                 f"<a target ='_parent' href='/correct_location/?id={dropoff.id}'><b>Submit a correction for this bin</b></a>"
                                 ]
                                 )
@@ -84,7 +84,7 @@ def correct_location(request):
                                 f"<b>Address:</b>  {dropoff.location_address}",
                                 f"<b>City:</b>  {dropoff.city}",
                                 f"<b>Phone:</b>  {dropoff.phone}<br>",
-                                f"<b><a target ='_blank' href='{dropoff.url}'>Visit Website</b></a>",
+                                f"<b><a target ='_blank' href='{dropoff.website}'>Visit Website</b></a>",
                                 f"<a target ='_parent' href='/correct_location/?id={dropoff.id}'><b>Submit a correction for this bin</b></a>"
                                 ]
                                 )
@@ -99,4 +99,10 @@ def correct_location(request):
     map_id = map.get_name()
     return render(request, 'dropoff_locations/correct_location.html', {'map': map_html, 'map_id': map_id, 'form': form})
 
-    
+def locations(request):
+    map = get_map()
+    map_html = map._repr_html_()
+    map_id = map.get_name()
+    locations = DropoffLocation.objects.all()
+    return render(request, 'dropoff_locations/locations.html', {'map': map_html, 'map_id': map_id, 'locations': locations})
+
