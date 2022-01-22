@@ -103,6 +103,6 @@ def locations(request):
     map = get_map()
     map_html = map._repr_html_()
     map_id = map.get_name()
-    locations = DropoffLocation.objects.all()
+    locations = DropoffLocation.objects.all().order_by('pk')
     return render(request, 'dropoff_locations/locations.html', {'map': map_html, 'map_id': map_id, 'locations': locations})
 
