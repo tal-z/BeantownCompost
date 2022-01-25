@@ -28,28 +28,52 @@
             <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav text-light">
-                <li class="nav-item active">
-                <a class="nav-link" href="/dropoff">Find a Compost Drop-off</a>
-                </li>
-                <li class="nav-item">
-                <a class="nav-link" href="/add_location">Add an Additional Compost Drop-off</a>
-                </li>
-                <li class="nav-item">
-                <a class="nav-link" href="/locations">Submit a Correction to the Map</a>
-                </li>
-                <li class="nav-item">
-                <a class="nav-link" href="/vote">Vote for a New Bin Location</a>
-                </li>
-                <li class="nav-item">
-                <a class="nav-link" href="#">How It Works</a>
-                </li>
-            </ul>
+                <ul class="navbar-nav text-light">
+                    <li class="nav-item active p-1">
+                    <a class="nav-link" href="/dropoff">Find a Compost Drop-off</a>
+                    </li>
+                    <li class="nav-item p-1">
+                    <a class="nav-link" href="/add_location">Add an Additional Compost Drop-off</a>
+                    </li>
+                    <li class="nav-item p-1">
+                    <a class="nav-link" href="/locations">Submit a Correction to the Map</a>
+                    </li>
+                    <li class="nav-item p-1">
+                    <a class="nav-link" href="/vote">Vote for a New Bin Location</a>
+                    </li>
+                    <li class="nav-item p-1">
+                    <a class="nav-link" href="#">How It Works</a>
+                    </li>
+                    {% if user.is_authenticated %}
+
+                        <div class="dropdown-divider"></div>
+                        <li class="nav-item dropdown p-1">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                👤 {{user.username}}
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDropdownMenuLink">
+                            <a class="dropdown-item" href="{% url 'profile' %}">Profile</a>
+                            <a class="dropdown-item" href="#">Request Permission to Manage a Site</a>
+                            <a class="dropdown-item" href="{% url 'logout' %}">Log Out</a>
+                            </div>
+                        </li>
+                    {% else %}
+                        <li class="nav-item  p-1">
+                        <a class="nav-link" href="{% url 'login' %}">👤 Managers Login</a>
+                        </li>
+                    {% endif %}
+                </ul>
             </div>
-        </div>
       </nav>
         <h2 class="text-light container-fluid">{% block header %}{% endblock header %}</h2>
         <div class="container-fluid">
+            {% if messages %}
+                {% for message in messages%}
+                    <div class="alert alert-{{message.tags}}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
             {% block content %}
             {% endblock content %}
         </div>
