@@ -10,6 +10,7 @@ There are also tools for users to submit corrections to existing locations, subm
 Apps:
   - beantowncompost (main)
   - dropoff_locations (functionality for managing and displaying drop-off locations)
+  - managers
   
 
 ## Technologies:
@@ -18,8 +19,10 @@ Apps:
       - Crispy Forms
       - GeoDjango
     - Folium
-    - Bokeh??
   - Database:
     - PostgreSQL
     - PostGIS extension
+  - Javascript
+    - Leaflet
+  - Bootstrap
    
