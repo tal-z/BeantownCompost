@@ -1,0 +1,14 @@
+{% extends 'dropoff_locations/base.html'%}
+{% load crispy_forms_tags %}
+
+{% block content %}
+    <div class="content-section text-light">
+        <legend class="border-botton mb-4 text-light">Register to Claim a Site!</legend>
+        {% crispy form %}
+        <div class="border-top pt-3">
+            <small class="text-muted">
+                Already Have An Account? <a class="ml-2" href="{% url 'login'%}">Log In Here</a>
+            </small>
+        </div>
+    </div>
+{% endblock content %}

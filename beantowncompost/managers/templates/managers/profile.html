@@ -1,0 +1,25 @@
+{% extends 'dropoff_locations/base.html'%}
+{% load crispy_forms_tags %}
+
+{% block content %}
+    <div class="map-container">
+        {{ map|safe }}
+    </div>
+    <table class="table table-striped table-dark table-bordered text-light table-hover table-sm">
+        <thead>
+            <tr><th>Click a Location to Manage Details</th></tr></thead>
+            {% for site in sites %}
+                <tr onclick="navigate_to('/correct_location/?id={{ site.id }}')"><td class="col-md-3">{{ site }}</td></tr>
+            {% endfor %}
+    </table>
+{% endblock content %}
+{% block script %}
+<script>
+    let frame = document.getElementsByTagName('iframe')[0];
+    var innerDoc = frame.contentDocument || frame.contentWindow.document;
+
+    function navigate_to(url) {
+        window.location = url;
+    }
+</script>
+{% endblock script %}
