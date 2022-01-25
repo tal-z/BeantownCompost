@@ -13,7 +13,7 @@
 Submit A Correction to the Map
 {% endblock title %}
 {% block header %}
-Submit A Correction to the Map
+Submit A Correction - {{ dropoff.location_name }}
 {% endblock header %}
 
 {% block content %}
@@ -65,8 +65,8 @@ crossorigin=""></script>
 
     function values_to_placeholders() {
         {% for field in form %}
+            document.getElementById("id_{{ field.name }}").placeholder = document.getElementById("id_{{ field.name }}").value;
             {% if field.name != 'location_name' %}
-                document.getElementById("id_{{ field.name }}").placeholder = document.getElementById("id_{{ field.name }}").value;
                 document.getElementById("id_{{ field.name }}").value = '';
             {% endif %}
         {% endfor %}
