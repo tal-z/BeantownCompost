@@ -1,10 +1,7 @@
-import site
-from django.forms import forms
 from django.shortcuts import render, redirect
 #from django.contrib.auth.forms import UserCreationForm
 from django.contrib import messages
-from markupsafe import re
-from dropoff_locations.views import index
+from dropoff_locations.views import get_map
 from .forms import UserRegisterForm, LoginForm
 from django.contrib.auth.decorators import login_required
 # Create your views here.
@@ -24,7 +21,9 @@ def register(request):
 
 @login_required
 def profile(request):
-    sites = [request.user.managerprofile.site1, request.user.managerprofile.site2, request.user.managerprofile.site3]
-    print(sites)
-    sites = [site for site in sites if site != None]
-    return render(request, 'managers/profile.html', {'sites': sites})
+    sites = request.user.managerprofile.sites
+    map = get_map(sites)
+    map_html = map._repr_html_()
+    map_id = map.get_name()
+
+    return render(request, 'managers/profile.html', {'sites': sites, 'map': map_html, 'map_id': map_id})
