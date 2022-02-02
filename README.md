@@ -25,4 +25,6 @@ Apps:
   - Javascript
     - Leaflet
   - Bootstrap
+  - Email Client
+    - SendGrid
    
