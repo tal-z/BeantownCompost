@@ -1,4 +1,3 @@
-from http.client import HTTPResponse
 from django.shortcuts import render, redirect
 import folium
 from folium import plugins
@@ -8,6 +7,7 @@ from django.http import Http404
 from django.shortcuts import render
 from .models import DropoffLocation
 from .forms import DropoffLocationForm, AddDropoffLocationForm, CorrectDropoffLocationForm, VoteDropoffLocationForm
+from django.contrib import messages
 
 
 def get_map(locations, height='100%', start_coords=(42.36034, -71.0578633)):
@@ -71,10 +71,20 @@ def add_location(request):
 
 def correct_location(request):
     if request.method == 'POST':
-        form = CorrectDropoffLocationForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return render(request, 'dropoff_locations/thanks.html', {'action': 'submitting your correction'})
+        if request.user.is_authenticated:
+            loc_name = request.POST.get('location_name')
+            if loc_name in {site.location_name for site in request.user.managerprofile.sites}:
+                dropoff = DropoffLocation.objects.get(location_name=loc_name)                
+                form = DropoffLocationForm(request.POST, instance=dropoff)
+                if form.is_valid():
+                    form.save()
+                    return render(request, 'dropoff_locations/thanks.html', {'action': 'submitting your update'})
+        if True:
+            messages.info(request, "Heads up! You don't have permission to edit this site. Your submission has been saved, and will be reviewed as a correction.")
+            form = CorrectDropoffLocationForm(request.POST)
+            if form.is_valid():
+                form.save()
+                return render(request, 'dropoff_locations/thanks.html', {'action': 'submitting your correction'})
     dropoff = DropoffLocation.objects.get(pk=request.GET.get('id', None))
     map = get_map([dropoff], start_coords=(dropoff.latitude-.05, dropoff.longitude))
     map_html = map._repr_html_()
