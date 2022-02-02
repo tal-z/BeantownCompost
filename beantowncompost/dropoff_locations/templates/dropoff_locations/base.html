@@ -6,11 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">    
-    <style>
-        html, body {
-            background-color: #343a40;
-        }
-    </style>
+
     {% block extra_style %}{% endblock extra_style %}
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js" integrity="sha512-3P8rXCuGJdNZOnUx/03c1jOTnMn3rP63nBip5gOP2qmUh5YAdVAvFZ1E+QLZZbC1rtMrQb+mah3AfYW11RUrWA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
@@ -19,7 +15,7 @@
 
     <title>{% block title %}Document{% endblock title %}</title>
 </head>
-<body>
+<body class="bg-dark">
     <div class="container-fluid bg-dark">
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark ">
         <div class="container-fluid">
@@ -33,19 +29,21 @@
                     <a class="nav-link" href="/dropoff">Find a Compost Drop-off</a>
                     </li>
                     <li class="nav-item p-1">
-                    <a class="nav-link" href="/add_location">Add an Additional Compost Drop-off</a>
+                        <a class="nav-link" href="#">How It Works</a>
                     </li>
-                    <li class="nav-item p-1">
-                    <a class="nav-link" href="/locations">Submit a Correction to the Map</a>
-                    </li>
-                    <li class="nav-item p-1">
-                    <a class="nav-link" href="/vote">Vote for a New Bin Location</a>
-                    </li>
-                    <li class="nav-item p-1">
-                    <a class="nav-link" href="#">How It Works</a>
+                    <li class="nav-item dropdown p-1">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Submit Map Updates
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDropdownMenuLink">
+                        <a class="dropdown-item" href="/add_location">Add an Additional Compost Drop-off</a>
+                        <a class="dropdown-item" href="/locations">Submit a Correction to the Map</a>
+                        <a class="dropdown-item" href="/vote">Vote for a New Bin Location</a>
+                        {% if not user.is_authenticated %}
+                            <a class="dropdown-item" href="{% url 'login' %}">👤 Managers Login</a>
+                        {% endif %}
                     </li>
                     {% if user.is_authenticated %}
-
                         <div class="dropdown-divider"></div>
                         <li class="nav-item dropdown p-1">
                             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -53,13 +51,10 @@
                             </a>
                             <div class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDropdownMenuLink">
                             <a class="dropdown-item" href="{% url 'profile' %}">Profile</a>
+                            <a class="dropdown-item" href="#">Settings</a>
                             <a class="dropdown-item" href="#">Request Permission to Manage a Site</a>
                             <a class="dropdown-item" href="{% url 'logout' %}">Log Out</a>
                             </div>
-                        </li>
-                    {% else %}
-                        <li class="nav-item  p-1">
-                        <a class="nav-link" href="{% url 'login' %}">👤 Managers Login</a>
                         </li>
                     {% endif %}
                 </ul>
@@ -77,7 +72,7 @@
             {% block content %}
             {% endblock content %}
         </div>
-    <footer class="bg-dark text-center text-lg-start navbar-fixed-bottom">
+    <footer class="bg-dark text-center text-lg-start navbar-fixed-bottom ">
         <div class="text-center text-light bg-dark p-3">
           Made with ❤️ by 
           <a class="text-light" href="http://www.talzaken.com/">Tal Zaken</a>
