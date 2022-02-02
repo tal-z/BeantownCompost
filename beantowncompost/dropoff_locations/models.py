@@ -1,4 +1,6 @@
+from tkinter import CASCADE
 from django.contrib.gis.db import models
+from django.contrib.auth.models import Group
 
 # Create your models here.
 class DropoffLocation(models.Model):
@@ -16,7 +18,9 @@ class DropoffLocation(models.Model):
 
     # Returns the string representation of the model.
     def __str__(self):
-        return self.location_name
+        return self.location_name + ' Dropoff'
+    
+    
 
 class AddDropoffLocation(models.Model):
     # Regular Django fields corresponding to the attributes in dropoff_locations.csv
@@ -34,7 +38,7 @@ class AddDropoffLocation(models.Model):
 
     # Returns the string representation of the model.
     def __str__(self):
-        return self.location_name
+        return self.location_name + ' New Dropoff Suggestion'
 
 
 class CorrectDropoffLocation(models.Model):
@@ -53,7 +57,7 @@ class CorrectDropoffLocation(models.Model):
 
     # Returns the string representation of the model.
     def __str__(self):
-        return self.location_name
+        return self.location_name + ' Dropoff Correction'
 
 
 class VoteDropoffLocation(models.Model):
