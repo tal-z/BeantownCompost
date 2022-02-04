@@ -41,7 +41,7 @@ class AddDropoffLocationForm(ModelForm):
             Div(Column('phone', css_class='col-4'), Column('website', css_class='col-8'), css_class='row'),
             'longitude',
             'latitude',
-            FormActions(Submit('Submit', 'Submit', css_class='btn btn-light mt-3', onclick='validate_latlng()'))
+            FormActions(Submit('Submit', 'Submit', css_class='btn btn-light mt-3'))
         )
         
 
