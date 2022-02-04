@@ -1,23 +1,13 @@
 {% extends 'dropoff_locations/base.html' %}
-{% block extra_style %}
-<style>
-    .map-container {
-        height: 80vh;
-        display: block;
-        overflow: hidden;
-    }
-</style>
-<meta http-equiv="refresh" content="30;url=/" />
-{% endblock extra_style %}
 {% block title %}
 Thank You for {{ action }}!
 {% endblock title %}
 {% block header %}
+Thank you
 {% endblock header %}
 
 {% block content %}
 
-<h1 class="text-light">Thank you</h1>
 <h2 class="text-muted">for {{ action }}!</h2>
 
 {% endblock content %}

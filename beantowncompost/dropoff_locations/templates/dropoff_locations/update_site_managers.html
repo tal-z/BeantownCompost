@@ -1,0 +1,77 @@
+{% extends 'dropoff_locations/base.html' %}
+{% load crispy_forms_tags %}
+{% block extra_style %} 
+<style>
+    .changed {
+        background-color: rgb(228, 213, 130);
+    }
+</style>
+{% endblock extra_style%}
+{% block title %}
+Update Site Management Permissions
+{% endblock title %}
+{% block header %}
+Update Site Management Permissions
+{% endblock header %}
+
+{% block content %}
+<table class="table table-striped table-dark table-bordered text-light table-hover table-sm" >
+    <thead>
+        <tr class="text-center">
+            <th>Site Name</th><th>User</th><th>Status</th>
+        </tr>
+    </thead>
+    {% for per_form in per_forms %}
+        <tr class="text-center">
+            <td class="col-md-3">{{ per_form.0.site }}</td>
+            <td class="col-md-3">{{ per_form.0.user }}</td>
+            <td class="col-md-6">
+                <div class="container-fluid">{% crispy per_form.1 %}</div>
+            </td>
+        </tr>
+    {% endfor %}
+</table>
+
+<form action="" method="post">
+    {% for per_form in per_forms %}
+    {% csrf_token %}
+        <fieldset style="display: none;">{{ per_form.1 }}</fieldset>
+    {% endfor %}
+    <button type="submit" class="btn btn-light">Update All Statuses</button>
+</form>
+{% endblock content %}
+{% block script %}
+<script>
+    function sync_statuses(NodeList, selection){
+        for (let i = 0; i< NodeList.length; i++) {
+            NodeList[i].value = selection.value;
+        }
+    };
+
+    {% for per_form in per_forms %}
+        const {{ per_form.2 }}_{{per_form.0.user}}_statuses = document.getElementsByName('{{ per_form.2 }}-{{ per_form.0.user }}-status');
+        const {{ per_form.2 }}_{{per_form.0.user}}_selection = {{ per_form.2 }}_{{per_form.0.user}}_statuses[0];
+        console.log({{ per_form.2 }}_{{per_form.0.user}}_selection);
+        {{ per_form.2 }}_{{per_form.0.user}}_selection.addEventListener('change', (event) => {
+            sync_statuses({{ per_form.2 }}_{{per_form.0.user}}_statuses, {{ per_form.2 }}_{{per_form.0.user}}_selection);
+        });
+    {% endfor %}
+
+    // Highlights changed fields
+    (function() {
+        var inputs = document.querySelectorAll("select");
+
+        for (var i = 0; i < inputs.length; i++) {
+            var initialValue = inputs[i].value;
+
+            inputs[i].addEventListener("input", function(initialValue) {
+            if (initialValue !== this.value) {
+                this.classList.add("changed");
+            } else {
+                this.classList.remove("changed");
+            }
+            });
+        }
+    })();
+</script>
+{% endblock script%}

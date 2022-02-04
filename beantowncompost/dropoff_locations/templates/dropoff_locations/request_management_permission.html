@@ -1,0 +1,20 @@
+{% extends 'dropoff_locations/base.html' %}
+{% block title %}
+Request Management Permission
+{% endblock title %}
+{% block header %}
+Request Management Permission
+{% endblock header %}
+
+{% block content %}
+<div class="text-light">
+    {% for dropoff in dropoffs %}
+        <form method="POST">
+            {% csrf_token %}
+            <input type="text" value="{{ dropoff.location_name }}" hidden="True" name="site" id="site"/>
+            <button type="Submit" value="Submit">Request Management Permission</button>
+            {{ dropoff.location_name }}
+        </form><br>
+    {% endfor %}
+</div>
+{% endblock content %}

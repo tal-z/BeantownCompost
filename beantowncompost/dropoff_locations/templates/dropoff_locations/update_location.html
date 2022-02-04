@@ -1,6 +1,5 @@
 {% extends 'dropoff_locations/base.html' %}
 {% load crispy_forms_tags %}
-
 {% block extra_style %}
 <style>
     .map-container {
@@ -11,19 +10,21 @@
 </style>
 {% endblock extra_style %}
 {% block title %}
-Vote for a Drop Off Location
+Submit An Update to {{ dropoff.location_name }}
 {% endblock title %}
 {% block header %}
-Vote for a Drop Off Location
+Submit An Update - {{ dropoff.location_name }}
 {% endblock header %}
+
 {% block content %}
-    <label class="text-light" for="map-container">Click to drop a pin</label><br>
-    <div class="map-container" name="map-container">
-        {{ map|safe }}
-    </div>
-    <div class="text-light">
-        {% crispy form %}
-    </div>
+<label class="text-light" for="map-container">Click to drop a pin</label><br>
+<div class="map-container" name="map-container">
+    {{ map|safe }}
+</div>
+
+<div class="text-light">
+    {% crispy form %}
+</div>
 {% endblock content %}
 {% block script %} 
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
@@ -62,10 +63,5 @@ crossorigin=""></script>
 
         }, 100);
 
-        function validate_latlng() {
-            if ((! y_input.value)||(! x_input.value)) {
-                alert('Please click to select a location on the map!')
-            };
-        };
     </script>
 {% endblock script %}
