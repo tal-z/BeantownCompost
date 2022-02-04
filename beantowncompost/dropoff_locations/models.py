@@ -5,16 +5,16 @@ from django.contrib.auth.models import Group
 # Create your models here.
 class DropoffLocation(models.Model):
     # Regular Django fields corresponding to the attributes in dropoff_locations.csv
-    neighborhood_name = models.CharField(max_length=100, null=True, blank=True)
+    neighborhood_name = models.CharField(max_length=100, null=True, blank=False)
     location_name = models.CharField(max_length=100, null=True)
-    location_description = models.CharField(max_length=1000, null=True, blank=True)
-    location_address = models.CharField(max_length=1000, null=True, blank=True)
-    phone = models.CharField(max_length=500, null=True, blank=True)
-    url = models.CharField(max_length=500, null=True, blank=True, name='website')
-    x = models.FloatField(default=None, null=True, blank=True, name='longitude')
-    y = models.FloatField(default=None, null=True, blank=True, name='latitude')
+    location_description = models.CharField(max_length=1000, null=True, blank=False)
+    location_address = models.CharField(max_length=1000, null=True, blank=False)
+    phone = models.CharField(max_length=500, null=True, blank=False)
+    url = models.CharField(max_length=500, null=True, blank=False, name='website')
+    x = models.FloatField(default=None, null=True, blank=False, name='longitude')
+    y = models.FloatField(default=None, null=True, blank=False, name='latitude')
     point = models.PointField(srid=4326, default=None, null=True, blank=True)
-    city = models.CharField(max_length=100, default=None, null=True, blank=True)
+    city = models.CharField(max_length=100, default=None, null=True, blank=False)
 
     # Returns the string representation of the model.
     def __str__(self):
