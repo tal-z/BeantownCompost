@@ -4,6 +4,7 @@ Beantown Compost is a location-focused resource for composting in the Greater Bo
 The main function of Beantown Compost is to display a map of drop-off composting locations. 
 There are also tools for users to submit corrections to existing locations, submit additional locations, and vote for new locations.
 
+![Beantown Compost](https://raw.githubusercontent.com/tal-z/BeantownCompost/master/BeantownCompost.PNG)
 
 ## Project Structure:
 
