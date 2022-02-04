@@ -19,7 +19,7 @@
         <thead>
             <tr><th>Click a Location to Manage Details</th></tr></thead>
             {% for site in sites %}
-                <tr onclick="navigate_to('/correct_location/?id={{ site.id }}')"><td class="col-md-3">{{ site }}</td></tr>
+                <tr onclick="navigate_to('/update_location/?id={{ site.id }}')"><td class="col-md-3">{{ site }}</td></tr>
             {% endfor %}
     </table>
 {% endblock content %}

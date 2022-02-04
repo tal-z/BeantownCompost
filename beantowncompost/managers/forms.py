@@ -1,9 +1,11 @@
+from turtle import onclick
 from django import forms
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, PasswordResetForm, PasswordChangeForm, SetPasswordForm
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Div, Column, Submit
 from crispy_forms.bootstrap import FormActions
+from .models import ManagerSitePermission
 
 
 class UserRegisterForm(UserCreationForm):
@@ -86,3 +88,32 @@ class SetPasswordForm(SetPasswordForm):
             Div('new_password2', placeholder="Confirm New Password",  css_class="row mt-2"),
             FormActions(Submit('Submit', 'Submit', css_class='btn btn-light mt-3 mb-3'))
         )
+
+
+
+
+
+class ManagerSitePermissionForm(forms.ModelForm):
+    
+    class Meta:
+        model = ManagerSitePermission
+        fields = ['site', 'user', 'status']
+    
+    def __init__(self, *args, **kwargs):
+            super().__init__(*args, **kwargs)
+            self.fields['site'].widget = forms.HiddenInput()
+            self.fields['user'].widget = forms.HiddenInput()
+            self.helper = FormHelper()
+            self.helper.form_method = 'POST'
+            self.helper.form_show_labels = False
+
+            
+            self.helper.layout = Layout(
+                    Div(                    
+                        Div('site'),
+                        Div('user'),
+                        Column('status', css_class="col-4"),
+                        Column(FormActions(Submit('Update Status', 'Update Status', css_class='btn btn-light')), css_class="col-2"), 
+                        css_class="row"
+                    ),
+            )
