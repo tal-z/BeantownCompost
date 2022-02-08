@@ -29,19 +29,8 @@ Submit a Correction - Select a Location
 {% endblock content %}
 {% block script %}
 <script>
-    let frame = document.getElementsByTagName('iframe')[0];
-    var innerDoc = frame.contentDocument || frame.contentWindow.document;
-
     function navigate_to(url) {
         window.location = url;
     }
-    //function highlight_pin(id) {
-    //    innerDoc.body.querySelector("#{{ map_id }} > div.leaflet-pane.leaflet-map-pane > div.leaflet-pane.leaflet-marker-pane > div:nth-child("+ id +")").classList.add('awesome-marker-icon-red');
-    //    innerDoc.body.querySelector("#{{ map_id }} > div.leaflet-pane.leaflet-map-pane > div.leaflet-pane.leaflet-marker-pane > div:nth-child("+ id +")").classList.remove('awesome-marker-icon-green');
-    //}
-    //function unhighlight_pin(id) {
-    //    innerDoc.body.querySelector("#{{ map_id }} > div.leaflet-pane.leaflet-map-pane > div.leaflet-pane.leaflet-marker-pane > div:nth-child("+ id +")").classList.add('awesome-marker-icon-green');
-    //    innerDoc.body.querySelector("#{{ map_id }} > div.leaflet-pane.leaflet-map-pane > div.leaflet-pane.leaflet-marker-pane > div:nth-child("+ id +")").classList.remove('awesome-marker-icon-red');
-    //}
 </script>
 {% endblock script %}
