@@ -28,6 +28,32 @@ class DropoffLocationForm(ModelForm):
                 'latitude',
                 FormActions(Submit('Submit', 'Add Location', onclick='validate_latlng()', css_class='btn btn-light mt-3'))
             )
+            
+
+class UpdateDropoffLocationForm(ModelForm):
+    id = IntegerField()
+    class Meta:
+        model = DropoffLocation
+        fields = ['id', 'location_name','location_description','location_address', 'neighborhood_name', 'city', 'phone','website','longitude','latitude']
+    
+    def __init__(self, *args, **kwargs):
+            super().__init__(*args, **kwargs)
+            self.helper = FormHelper()
+            self.helper.form_method = 'POST'
+            self.fields['id'].widget = HiddenInput()
+            self.helper.form_action = "/update_location/"
+
+            self.helper.layout = Layout(
+                Div('id'),
+                Div(Column('location_name', css_class='col-4'), Column('location_address', css_class='col-8'), css_class='row'),
+                'location_description',
+                Div(Column('neighborhood_name', css_class='col-6'), Column('city', css_class='col-6'), css_class='row'),
+                Div(Column('phone', css_class='col-4'), Column('website', css_class='col-8'), css_class='row'),
+                'longitude',
+                'latitude',
+                FormActions(Submit('Submit', 'Update Location', onclick='validate_latlng()', css_class='btn btn-light mt-3'))
+            )
+
 class SuggestDropoffLocationForm(ModelForm):
 
     class Meta:
