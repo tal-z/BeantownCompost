@@ -1,0 +1,3 @@
+UPDATE dropoff_locations_dropofflocation
+SET point = st_makepoint(longitude, latitude)
+WHERE point is null
