@@ -14,7 +14,7 @@ from django.contrib.auth.decorators import login_required, permission_required
 def get_map(locations, height='100%', start_coords=(42.36034, -71.0578633)):
     folium_map = folium.Map(location=start_coords, tiles='OpenStreetMap', height=height)
     plugins.LocateControl(keepCurrentZoomLevel=True).add_to(folium_map)
-    dropoffs = []
+    dropoff_points = []
     for dropoff in locations:
         iframe = "<br>".join([f"<b>{dropoff.neighborhood_name}</b>",
                                 dropoff.location_name + "<br>",
@@ -33,8 +33,10 @@ def get_map(locations, height='100%', start_coords=(42.36034, -71.0578633)):
                         icon=folium.Icon(color="green", icon="fa-trash", prefix='fa'), marker_id=f'marker_{dropoff.id}'
                         )
         marker.add_to(folium_map)
-        dropoffs.append([dropoff.latitude, dropoff.longitude])
-    folium_map.fit_bounds(dropoffs)
+        dropoff_points.append([dropoff.latitude, dropoff.longitude])
+    sw_bound = min(item[0] for item in dropoff_points), min(item[1] for item in dropoff_points)
+    ne_bound = max(item[0] for item in dropoff_points), max(item[1] for item in dropoff_points)
+    folium_map.fit_bounds([sw_bound, ne_bound])
 
     return folium_map
 
