@@ -7,6 +7,7 @@ from .forms import UserRegisterForm
 from django.contrib.auth.decorators import login_required
 # Create your views here.
 
+
 def register(request):
     if request.method == "POST":
         form = UserRegisterForm(request.POST)   
@@ -21,10 +22,10 @@ def register(request):
 
 
 @login_required
-def profile(request):
+def my_sites(request):
     site_permissions = ManagerSitePermission.objects.filter(user=request.user)
     dropoffs = [perm.site for perm in site_permissions]
     map = get_map(dropoffs)
     map_html = map._repr_html_()
     map_id = map.get_name()
-    return render(request, 'managers/profile.html', {'dropoffs': dropoffs, 'map': map_html, 'map_id': map_id})
+    return render(request, 'managers/my_sites.html', {'dropoffs': dropoffs, 'map': map_html, 'map_id': map_id})
