@@ -1,4 +1,6 @@
 {% extends 'dropoff_locations/base.html' %}
+{% load crispy_forms_tags %}
+
 {% block title %}
 Request Management Permission
 {% endblock title %}
@@ -8,6 +10,7 @@ Request Management Permission
 
 {% block content %}
 <div class="text-light">
+    <!--
     {% for dropoff in dropoffs %}
         <form method="POST">
             {% csrf_token %}
@@ -15,6 +18,8 @@ Request Management Permission
             <button type="Submit" value="Submit">Request Management Permission</button>
             {{ dropoff.location_name }}
         </form><br>
-    {% endfor %}
+    {% endfor %} 
+    -->
+    {% crispy form %}
 </div>
 {% endblock content %}
