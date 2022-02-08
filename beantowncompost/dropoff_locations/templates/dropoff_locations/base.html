@@ -31,11 +31,11 @@
                     </li>
                     <li class="nav-item dropdown p-1">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                          Submit Map Updates
+                            Suggest Map Updates
                         </a>
                         <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDropdownMenuLink">
-                            <li><a class="dropdown-item" href="/add_location">Add an Additional Compost Drop-off</a></li>
-                            <li><a class="dropdown-item" href="/locations">Submit a Correction to the Map</a></li>
+                            <li><a class="dropdown-item" href="{% url 'suggest_location' %}">Suggest an Additional Compost Drop-off</a></li>
+                            <li><a class="dropdown-item" href="/locations">Suggest a Correction to the Map</a></li>
                             <li><a class="dropdown-item" href="/vote">Vote for a New Bin Location</a></li>
                         {% if not user.is_authenticated %}
                             <li><a class="dropdown-item" href="{% url 'login' %}">👤 Managers Login</a></li>
@@ -49,13 +49,17 @@
                                 👤 {{user.username}}
                             </a>
                             <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDropdownMenuLink">
-                                <li><a class="dropdown-item" href="{% url 'profile' %}">Profile</a></li>
-                                <li><a class="dropdown-item" href="#">Settings</a></li>
+                                <li><a class="dropdown-item" href="{% url 'profile' %}">Manage My Sites</a></li>
+                            {% if perms.dropoff_location.add_dropofflocation %}
+                                <li><a class="dropdown-item" href="{% url 'add_location' %}">Add a New Drop-off Location</a></li>
+                            {% endif %}
                             {% if perms.managers.change_managerprofile %}
+                                <li><a class="dropdown-item" href="{% url 'review_suggested_locations' %}">Review Suggested Drop-off Sites</a></li>
                                 <li><a class="dropdown-item" href="{% url 'update_site_managers' %}">Update Site Management Permissions</a></li>
                             {% else %}
                                 <li><a class="dropdown-item" href="{% url 'request_management_permission' %}">Request Permission to Manage a Site</a></li>
                             {% endif %}
+                                <li><a class="dropdown-item" href="#">Account Settings</a></li>
                                 <li><a class="dropdown-item" href="{% url 'logout' %}">Log Out</a></li>
                             </ul>
                         </li>
@@ -63,7 +67,6 @@
                 </ul>
             </div>
       </nav>
-        <h2 class="text-light container-fluid">{% block header %}{% endblock header %}</h2>
         <div class="container-fluid">
             {% if messages %}
                 {% for message in messages%}
@@ -73,6 +76,7 @@
                     </div>
                 {% endfor %}
             {% endif %}
+            <h2 class="text-light">{% block header %}{% endblock header %}</h2>
             {% block content %}
             {% endblock content %}
         </div>
