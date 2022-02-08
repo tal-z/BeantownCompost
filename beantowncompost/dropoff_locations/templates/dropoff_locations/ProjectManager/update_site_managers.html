@@ -33,8 +33,9 @@ Update Site Management Permissions
 </table>
 
 <form action="" method="post">
-    {% for per_form in per_forms %}
     {% csrf_token %}
+    {% for per_form in per_forms %}
+        {% csrf_token %}
         <fieldset style="display: none;">{{ per_form.1 }}</fieldset>
     {% endfor %}
     <button type="submit" class="btn btn-light">Update All Statuses</button>
