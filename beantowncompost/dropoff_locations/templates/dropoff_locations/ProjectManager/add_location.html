@@ -10,10 +10,10 @@
 </style>
 {% endblock extra_style %}
 {% block title %}
-Submit An Additional Dropoff Location
+Add An Additional Dropoff Location
 {% endblock title %}
 {% block header %}
-Submit An Additional Dropoff Location
+Add An Additional Dropoff Location
 {% endblock header %}
 
 {% block content %}
@@ -61,5 +61,11 @@ crossorigin=""></script>
             });
 
         }, 100);
+        
+        function validate_latlng() {
+            if ((! y_input.value)||(! x_input.value)) {
+                alert('Please click to select a location on the map!')
+            };
+        };
     </script>
 {% endblock script %}
