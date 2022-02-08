@@ -59,7 +59,7 @@
                             {% else %}
                                 <li><a class="dropdown-item" href="{% url 'request_management_permission' %}">Request Permission to Manage a Site</a></li>
                             {% endif %}
-                                <li><a class="dropdown-item" href="#">Account Settings</a></li>
+                                <li><a class="dropdown-item" href="{% url 'my_account' %}">Account Settings</a></li>
                                 <li><a class="dropdown-item" href="{% url 'logout' %}">Log Out</a></li>
                             </ul>
                         </li>

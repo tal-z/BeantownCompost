@@ -1,16 +1,13 @@
-{% extends 'dropoff_locations/base.html'%}
+{% extends 'base.html'%}
 {% load crispy_forms_tags %}
-{% block extra_style %}
-<style>
-    .map-container {
-        height: 60vh;
-        display: block;
-        overflow: hidden;
-    }
-</style>
-{% endblock extra_style %}
+{% block title %}
+My Sites
+{% endblock title %}
+{% block header %}
+Hello, {{ user.username|default:'Guest' }}!
+{% endblock header %}
+
 {% block content %}
-    <h2 class="text-light">Hello, {{ user.username|default:'Guest' }}!</h2>
 
     <div class="map-container">
         {{ map|safe }}

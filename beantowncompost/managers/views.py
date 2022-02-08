@@ -29,3 +29,7 @@ def my_sites(request):
     map_html = map._repr_html_()
     map_id = map.get_name()
     return render(request, 'managers/my_sites.html', {'dropoffs': dropoffs, 'map': map_html, 'map_id': map_id})
+
+@login_required
+def my_account(request):
+    return render(request, 'managers/my_account.html')

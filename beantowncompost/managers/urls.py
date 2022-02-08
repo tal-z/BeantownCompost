@@ -5,6 +5,7 @@ from managers.forms import LoginForm, PasswordResetForm, PasswordChangeForm, Set
 
 urlpatterns = [
     path('my_sites/', views.my_sites, name='my_sites'),
+    path('my_account/', views.my_account, name='my_account'),
     path('register/', views.register, name='register'),
     path('login/', auth_views.LoginView.as_view(template_name='managers/auth/login.html',
             authentication_form=LoginForm), name='login'),
