@@ -4,7 +4,7 @@ from folium import plugins
 # Create your views here.
 from django.shortcuts import render, redirect
 from .models import DropoffLocation, SuggestDropoffLocation
-from .forms import DropoffLocationForm, SuggestDropoffLocationForm, CorrectDropoffLocationForm, VoteDropoffLocationForm, ReviewSuggestDropoffForm
+from .forms import DropoffLocationForm, SuggestDropoffLocationForm, CorrectDropoffLocationForm, VoteDropoffLocationForm, ReviewSuggestDropoffForm, UpdateDropoffLocationForm
 from managers.models import ManagerSitePermission
 from managers.forms import GrantManagerPermissionForm, RequestManagerPermissionForm
 from django.contrib import messages
@@ -34,9 +34,10 @@ def get_map(locations, height='100%', start_coords=(42.36034, -71.0578633)):
                         )
         marker.add_to(folium_map)
         dropoff_points.append([dropoff.latitude, dropoff.longitude])
-    sw_bound = min(item[0] for item in dropoff_points), min(item[1] for item in dropoff_points)
-    ne_bound = max(item[0] for item in dropoff_points), max(item[1] for item in dropoff_points)
-    folium_map.fit_bounds([sw_bound, ne_bound])
+    if dropoff_points:
+        sw_bound = min(item[0] for item in dropoff_points), min(item[1] for item in dropoff_points)
+        ne_bound = max(item[0] for item in dropoff_points), max(item[1] for item in dropoff_points)
+        folium_map.fit_bounds([sw_bound, ne_bound])
 
     return folium_map
 
@@ -104,9 +105,10 @@ def update_location(request):
         if request.user.is_authenticated:
             id = int(request.POST.get('id'))
             site_permissions = ManagerSitePermission.objects.filter(user=request.user)
+            print(site_permissions)
             if id in {perm.site.id for perm in site_permissions}:
                 dropoff = DropoffLocation.objects.get(id=id)                
-                form = DropoffLocationForm(request.POST, instance=dropoff)
+                form = UpdateDropoffLocationForm(request.POST, instance=dropoff)
                 if form.is_valid():
                     form.save()
                     return render(request, 'dropoff_locations/thanks.html', {'action': 'submitting your update'})
@@ -120,12 +122,12 @@ def update_location(request):
     map = get_map([dropoff], start_coords=(dropoff.latitude, dropoff.longitude))
     map_html = map._repr_html_()
     map_id = map.get_name()
-    form = DropoffLocationForm(instance=dropoff)
+    form = UpdateDropoffLocationForm(instance=dropoff)
     return render(request, 'dropoff_locations/update_location.html', {'map': map_html, 'map_id': map_id, 'form': form, 'dropoff': dropoff})
 
 
 def locations(request):
-    locations = DropoffLocation.objects.all().order_by('pk')
+    locations = DropoffLocation.objects.all().order_by('location_name')
     map = get_map(locations)
     map_html = map._repr_html_()
     map_id = map.get_name()
@@ -162,7 +164,7 @@ def update_site_managers(request):
 
 
 @login_required
-@permission_required('dropoff_location.add_dropofflocation', raise_exception=True)
+@permission_required('dropoff_locations.add_dropofflocation', raise_exception=True)
 def add_location(request):
     if request.method == 'POST':
         form = DropoffLocationForm(request.POST)
@@ -180,7 +182,7 @@ def add_location(request):
 
 
 @login_required
-@permission_required('dropoff_location.add_dropofflocation', raise_exception=True)
+@permission_required('dropoff_locations.add_dropofflocation', raise_exception=True)
 def review_suggested_locations(request):
     if request.method == 'POST':
         if 'add-site' in request.POST:
