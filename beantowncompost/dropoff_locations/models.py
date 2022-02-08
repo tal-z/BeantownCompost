@@ -1,6 +1,7 @@
 from tkinter import CASCADE
 from django.contrib.gis.db import models
 from django.contrib.auth.models import Group
+from django.contrib.gis.geos import Point
 
 # Create your models here.
 class DropoffLocation(models.Model):
@@ -16,25 +17,28 @@ class DropoffLocation(models.Model):
     point = models.PointField(srid=4326, default=None, null=True, blank=True)
     city = models.CharField(max_length=100, default=None, null=True, blank=False)
 
+
     # Returns the string representation of the model.
     def __str__(self):
         return self.location_name + ' Dropoff'
     
-    
 
-class AddDropoffLocation(models.Model):
+class SuggestDropoffLocation(models.Model):
     # Regular Django fields corresponding to the attributes in dropoff_locations.csv
+    first_name = models.CharField(max_length=100)
+    last_name = models.CharField(max_length=100)
     neighborhood_name = models.CharField(max_length=100)
     location_name = models.CharField(max_length=100)
     location_description = models.CharField(max_length=1000)
     location_address = models.CharField(max_length=1000)
     phone = models.CharField(max_length=500)
     url = models.CharField(max_length=500, name='website')
-    x = models.FloatField(default=None, null=True, blank=True, name='longitude')
-    y = models.FloatField(default=None, null=True, blank=True, name='latitude')
-    # GeoDjango-specific: a geometry field (MultiPolygonField)
-    point = models.PointField(srid=4326, default=None, null=True)
+    x = models.FloatField(default=None, null=True, name='longitude')
+    y = models.FloatField(default=None, null=True, name='latitude')
+    # GeoDjango-specific: a geometry field (PointField)
+    point = models.PointField(srid=4326, default=None, null=True, blank=True)
     city = models.CharField(max_length=100, default=None, null=True)
+    status = models.CharField(max_length=100, default="Awaiting Review", name='status')
 
     # Returns the string representation of the model.
     def __str__(self):
