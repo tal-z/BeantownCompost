@@ -1,0 +1,36 @@
+{% extends 'dropoff_locations/base.html' %}
+{% block title %}
+Review Suggested Drop-off Locations
+{% endblock title %}
+{% block header %}
+Review Suggested Drop-off Locations
+{% endblock header %}
+
+{% block content %}
+
+<table class="table table-striped table-dark table-bordered text-light table-hover table-sm">
+    <thead>
+        <tr><th>Location Name</th><th>Suggested By</th></tr></thead>
+        {% for suggestion in suggestions %}
+            <tr>
+                <td class="col-md-3">{{ suggestion.location_name }}</td>
+                <td class="col-md-3">{{ suggestion.first_name }} {{ suggestion.last_name }}</td>
+                <td class="col-md-3">
+                    <form method="POST">
+                        {% csrf_token %}
+                        <input type="text" name="id" value="{{ suggestion.id }}" style="display:none;"/>
+                        <button class="btn btn-light">Review Suggestion</button>
+                    </form>
+                </td>
+
+            </tr>
+        {% endfor %}
+</table>
+{% endblock content %}
+{% block script %}
+<script>
+    function navigate_to(url) {
+        window.location = url;
+    }
+</script>
+{% endblock script %}
