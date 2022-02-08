@@ -3,10 +3,10 @@ from folium import plugins
 
 # Create your views here.
 from django.shortcuts import render, redirect
-from .models import DropoffLocation
-from .forms import DropoffLocationForm, AddDropoffLocationForm, CorrectDropoffLocationForm, VoteDropoffLocationForm
+from .models import DropoffLocation, SuggestDropoffLocation
+from .forms import DropoffLocationForm, SuggestDropoffLocationForm, CorrectDropoffLocationForm, VoteDropoffLocationForm, ReviewSuggestDropoffForm
 from managers.models import ManagerSitePermission
-from managers.forms import ManagerSitePermissionForm
+from managers.forms import GrantManagerPermissionForm, RequestManagerPermissionForm
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required, permission_required
 
@@ -47,7 +47,7 @@ def vote(request):
         form = VoteDropoffLocationForm(request.POST)
         if form.is_valid():
             form.save()
-            return render(request, 'dropoff_locations/thanks.html', {'action': 'voting for a new location'})
+            return render(request, 'dropoff_locations/thanks.html', {'action': 'voting for a new drop-off'})
     locations = DropoffLocation.objects.all()
     map = get_map(locations)    
     map_html = map._repr_html_()
@@ -56,31 +56,35 @@ def vote(request):
     return render(request, 'dropoff_locations/vote.html', {'map': map_html, 'map_id': map_id, 'form': form})
 
 
-def add_location(request):
+def suggest_location(request):
     if request.method == 'POST':
-        form = AddDropoffLocationForm(request.POST)
+        form = SuggestDropoffLocationForm(request.POST)
         if form.is_valid():
             form.save()
-            return render(request, 'dropoff_locations/thanks.html', {'action': 'submitting a new location'})
+            return render(request, 'dropoff_locations/thanks.html', {'action': 'suggesting a new location'})
     locations = DropoffLocation.objects.all()
     map = get_map(locations)
     map_html = map._repr_html_()
     map_id = map.get_name()
-    form = AddDropoffLocationForm()
-    return render(request, 'dropoff_locations/add_location.html', {'map': map_html, 'map_id': map_id, 'form': form})
+    form = SuggestDropoffLocationForm()
+    return render(request, 'dropoff_locations/suggest_location.html', {'map': map_html, 'map_id': map_id, 'form': form})
 
 
 def correct_location(request):
     if request.method == 'POST':
         form = CorrectDropoffLocationForm(request.POST)
+        print(form)
         if form.is_valid():
             form.save()
             return render(request, 'dropoff_locations/thanks.html', {'action': 'submitting your correction'})
+        messages.warning(request, "Uh oh! There was a problem with your form submission. Check the fields and try again!")
     dropoff = DropoffLocation.objects.get(pk=request.GET.get('id', None))
     if request.user.is_authenticated:
-            if dropoff.location_name in {site.location_name for site in request.user.managerprofile.sites}:
-                messages.info(request, "Hey there! It looks like you're the manager for this site, so you have permission to update the map yourself. This is a heads up that your changes will be made live immediately. If you want to submit a correction for review instead, log out and click the 'Submit a Correction' button.")
-                return redirect(f'/update_location/?id={dropoff.id}')
+        id = int(request.GET.get('id'))
+        site_permissions = ManagerSitePermission.objects.filter(user=request.user)
+        if id in {perm.site.id for perm in site_permissions}:
+            messages.info(request, "Hey there! It looks like you're the manager for this site, so you have permission to update the map yourself. This is a heads up that your changes will be made live immediately. If you want to submit a correction for review instead, log out and click the 'Submit a Correction' button.")
+            return redirect(f'/update_location/?id={dropoff.id}')
     map = get_map([dropoff], start_coords=(dropoff.latitude, dropoff.longitude))
     map_html = map._repr_html_()
     map_id = map.get_name()
@@ -92,9 +96,10 @@ def correct_location(request):
 def update_location(request):
     if request.method == 'POST':
         if request.user.is_authenticated:
-            loc_name = request.POST.get('location_name')
-            if loc_name in {site.location_name for site in request.user.managerprofile.sites}:
-                dropoff = DropoffLocation.objects.get(location_name=loc_name)                
+            id = int(request.POST.get('id'))
+            site_permissions = ManagerSitePermission.objects.filter(user=request.user)
+            if id in {perm.site.id for perm in site_permissions}:
+                dropoff = DropoffLocation.objects.get(id=id)                
                 form = DropoffLocationForm(request.POST, instance=dropoff)
                 if form.is_valid():
                     form.save()
@@ -121,30 +126,85 @@ def locations(request):
     return render(request, 'dropoff_locations/locations.html', {'map': map_html, 'map_id': map_id, 'locations': locations})
 
 
-@login_required
-@permission_required('managers.change_managerprofile', raise_exception=True)
-def update_site_managers(request):
-    permissions = ManagerSitePermission.objects.all().order_by('site')
-    if request.method == 'POST':
-        print(request.POST)
-        print(permissions)
-        for permission in permissions:
-            status = request.POST.get(f'{permission.site.__str__().replace(" ", "_")}-{permission.user}-status')
-            if status and status != permission.status:
-                permission.status = status
-                permission.save()
-                messages.success(request, f"You've set {permission.user}'s permission to edit {permission.site} as '{permission.status}'!")
-        #return render(request, 'dropoff_locations/thanks.html', {'action': 'updating site manager permissions'})
-    per_forms = [(per, ManagerSitePermissionForm(instance=per, prefix=f'{per.site.__str__().replace(" ","_")}-{per.user}'), per.site.__str__().replace(" ","_")) for per in permissions]
-    return render(request, 'dropoff_locations/update_site_managers.html', {'per_forms': per_forms})
 
 
 
 @login_required
 def request_management_permission(request):
     if request.method == 'POST':
-        perm = ManagerSitePermission(site=DropoffLocation.objects.get(location_name=request.POST.get('site')), user=request.user)
+        dropoff=DropoffLocation.objects.get(id=request.POST.get('site'))
+        perm = ManagerSitePermission(site=dropoff, user=request.user)
         perm.save()
         return render(request, 'dropoff_locations/thanks.html', {'action': 'requesting management permission'})
-    dropoffs = DropoffLocation.objects.all()
-    return render(request, 'dropoff_locations/request_management_permission.html', {'dropoffs': dropoffs})
+    form = RequestManagerPermissionForm()
+    return render(request, 'dropoff_locations/request_management_permission.html', {'form': form})
+
+
+@login_required
+@permission_required('managers.change_managerprofile', raise_exception=True)
+def update_site_managers(request):
+    permissions = ManagerSitePermission.objects.all().order_by('site')
+    if request.method == 'POST':
+        for permission in permissions:
+            status = request.POST.get(f'{permission.site.__str__().replace(" ", "_")}-{permission.user}-status')
+            if status and status != permission.status:
+                permission.status = status
+                permission.save()
+                messages.success(request, f"You've set {permission.user}'s permission to edit {permission.site} as '{permission.status}'!")
+    per_forms = [(per, GrantManagerPermissionForm(instance=per, prefix=f'{per.site.__str__().replace(" ","_")}-{per.user}'), per.site.__str__().replace(" ","_")) for per in permissions]
+    return render(request, 'dropoff_locations/ProjectManager/update_site_managers.html', {'per_forms': per_forms})
+
+
+@login_required
+@permission_required('dropoff_location.add_dropofflocation', raise_exception=True)
+def add_location(request):
+    if request.method == 'POST':
+        form = DropoffLocationForm(request.POST)
+        form.fields['id'].required = False
+        if form.is_valid():
+            form.save()
+            return render(request, 'dropoff_locations/thanks.html', {'action': 'adding a drop-off location'})
+        messages.warning(request, "Uh oh! There was a problem with your form submission. Check the fields and try again!")
+    locations = DropoffLocation.objects.all().order_by('pk')
+    map = get_map(locations)
+    map_html = map._repr_html_()
+    map_id = map.get_name()
+    form = DropoffLocationForm()
+    return render(request, 'dropoff_locations/ProjectManager/add_location.html', {'map': map_html, 'map_id': map_id, 'locations': locations, 'form': form})
+
+
+@login_required
+@permission_required('dropoff_location.add_dropofflocation', raise_exception=True)
+def review_suggested_locations(request):
+    if request.method == 'POST':
+        if 'add-site' in request.POST:
+            #add site to map and mark suggestion as resolved.
+            form = DropoffLocationForm(request.POST)
+            suggestion = SuggestDropoffLocation.objects.get(id=request.POST.get('id'))
+            suggestion.status = 'Added to Map'
+            suggestion.save(force_update=True)
+            if form.is_valid():
+                form.save()
+                return render(request, 'dropoff_locations/thanks.html', {'action': 'adding a drop-off location'})
+        elif 'remove-from-queue' in request.POST:
+            # remove from queue by denying site
+            suggestion = SuggestDropoffLocation.objects.get(id=request.POST.get('id'))
+            suggestion.status = 'Denied'
+            suggestion.save(force_update=True)
+            return render(request, 'dropoff_locations/thanks.html', {'action': 'reviewing this drop-off location'})
+        elif 'id' in request.POST:
+            suggestion = SuggestDropoffLocation.objects.get(id=request.POST.get('id'))
+            data = {'id': suggestion.id}
+            for field in suggestion._meta.fields:
+                if field.name in DropoffLocationForm.Meta.fields:
+                    val = getattr(suggestion, field.name)
+                    data[field.name] = val
+            form = ReviewSuggestDropoffForm(data)
+            map = get_map([suggestion], start_coords=(suggestion.latitude, suggestion.longitude))
+            map_html = map._repr_html_()
+            map_id = map.get_name()
+            return render(request, 'dropoff_locations/ProjectManager/review_location.html',  {'map': map_html, 'map_id': map_id, 'locations': [suggestion], 'form': form})
+        messages.warning(request, "Something went wrong with your request to review a location. Please try again or contract the administrator.")
+    suggestions = SuggestDropoffLocation.objects.filter(status='Awaiting Review').order_by('location_name')
+    return render(request, 'dropoff_locations/ProjectManager/review_suggested_locations.html', {'suggestions': suggestions})
+
