@@ -49,8 +49,8 @@
                                 👤 {{user.username}}
                             </a>
                             <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDropdownMenuLink">
-                                <li><a class="dropdown-item" href="{% url 'profile' %}">Manage My Sites</a></li>
-                            {% if perms.dropoff_location.add_dropofflocation %}
+                                <li><a class="dropdown-item" href="{% url 'my_sites' %}">Manage My Sites</a></li>
+                            {% if perms.dropoff_locations.add_dropofflocation %}
                                 <li><a class="dropdown-item" href="{% url 'add_location' %}">Add a New Drop-off Location</a></li>
                             {% endif %}
                             {% if perms.managers.change_managerprofile %}
