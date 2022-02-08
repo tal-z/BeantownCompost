@@ -93,7 +93,7 @@ class SetPasswordForm(SetPasswordForm):
 
 
 
-class ManagerSitePermissionForm(forms.ModelForm):
+class GrantManagerPermissionForm(forms.ModelForm):
     
     class Meta:
         model = ManagerSitePermission
@@ -117,3 +117,27 @@ class ManagerSitePermissionForm(forms.ModelForm):
                         css_class="row"
                     ),
             )
+
+
+
+
+class RequestManagerPermissionForm(forms.ModelForm):
+    
+    class Meta:
+        model = ManagerSitePermission
+        fields = ['site', 'user']
+    
+    def __init__(self, *args, **kwargs):
+            super().__init__(*args, **kwargs)
+            self.fields['user'].widget = forms.HiddenInput()
+            self.helper = FormHelper()
+            self.helper.form_method = 'POST'
+            #self.helper.form_show_labels = False
+
+            
+            self.helper.layout = Layout(
+                Div('user'),
+                Div('site', css_class="col-4"),
+                Div(FormActions(Submit('Request Management Permission', 'Request Management Permission', css_class='btn btn-light mt-2')), css_class="col-2"), 
+            )
+            
