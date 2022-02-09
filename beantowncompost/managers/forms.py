@@ -125,11 +125,12 @@ class RequestManagerPermissionForm(forms.ModelForm):
     
     class Meta:
         model = ManagerSitePermission
-        fields = ['site', 'user']
+        fields = ['site', 'user', 'notes']
     
     def __init__(self, *args, **kwargs):
             super().__init__(*args, **kwargs)
             self.fields['user'].widget = forms.HiddenInput()
+            self.fields['notes'].widget = forms.Textarea()
             self.helper = FormHelper()
             self.helper.form_method = 'POST'
             #self.helper.form_show_labels = False
@@ -138,6 +139,7 @@ class RequestManagerPermissionForm(forms.ModelForm):
             self.helper.layout = Layout(
                 Div('user'),
                 Div('site', css_class="col-4"),
+                Div('notes', css_class="col-6"),
                 Div(FormActions(Submit('Request Management Permission', 'Request Management Permission', css_class='btn btn-light mt-2')), css_class="col-2"), 
             )
             

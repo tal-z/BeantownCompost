@@ -15,6 +15,7 @@ class ManagerSitePermission(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     site = models.ForeignKey(DropoffLocation, on_delete=models.CASCADE, default=None, null=True)
     status = models.CharField(max_length=50, choices=SITEMANAGER_STATUSES, default='requested')
+    notes = models.CharField(max_length=1000, null=True, blank=True)
 
     class Meta:
         unique_together= (('user', 'site'),)
