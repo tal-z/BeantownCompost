@@ -8,7 +8,9 @@ Account Settings
 {% endblock header %}
 
 {% block content %}
-<div class="text-light">
-    Hello world!
-</div>
+    <div class="card bg-dark text-light border-light">
+        <div class="card-body">
+          <a href="{% url 'password_change' %}" class="btn btn-light">Change Password</a>
+        </div>
+    </div>
 {% endblock content %}
