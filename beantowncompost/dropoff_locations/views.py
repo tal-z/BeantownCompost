@@ -3,7 +3,7 @@ from folium import plugins
 
 # Create your views here.
 from django.shortcuts import render, redirect
-from .models import DropoffLocation, SuggestDropoffLocation
+from .models import DropoffLocation, SuggestDropoffLocation, CorrectDropoffLocation
 from .forms import DropoffLocationForm, SuggestDropoffLocationForm, CorrectDropoffLocationForm, VoteDropoffLocationForm, ReviewSuggestDropoffForm, UpdateDropoffLocationForm
 from managers.models import ManagerSitePermission
 from managers.forms import GrantManagerPermissionForm, RequestManagerPermissionForm
@@ -215,4 +215,12 @@ def review_suggested_locations(request):
         messages.warning(request, "Something went wrong with your request to review a location. Please try again or contract the administrator.")
     suggestions = SuggestDropoffLocation.objects.filter(status='Awaiting Review').order_by('location_name')
     return render(request, 'dropoff_locations/ProjectManager/review_suggested_locations.html', {'suggestions': suggestions})
+
+
+
+@login_required
+@permission_required('dropoff_locations.change_dropofflocation', raise_exception=True)
+def review_suggested_corrections(request):
+    corrections = CorrectDropoffLocation.objects.filter(status='Awaiting Review').order_by('location_name')
+    return render(request, 'dropoff_locations/ProjectManager/review_suggested_corrections.html', {'corrections': corrections})
 

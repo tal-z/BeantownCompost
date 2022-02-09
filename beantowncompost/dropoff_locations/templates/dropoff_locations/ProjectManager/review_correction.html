@@ -1,0 +1,27 @@
+{% extends 'base.html'%}
+{% load crispy_forms_tags %}
+{% block extra_style %}
+<style>
+    .map-container {
+        height: 60vh;
+        display: block;
+        overflow: auto;
+    }
+</style>
+{% endblock extra_style %}
+{% block title %}
+Review An Additional Dropoff Location
+{% endblock title %}
+{% block header %}
+Review An Additional Dropoff Location
+{% endblock header %}
+
+{% block content %}
+<label class="text-light" for="map-container">Click to drop a pin</label><br>
+<div class="map-container" name="map-container">
+    {{ map|safe }}
+</div>
+<div class="text-light">
+    {% crispy form %}
+</div>
+{% endblock content %}

@@ -47,6 +47,8 @@ class SuggestDropoffLocation(models.Model):
 
 class CorrectDropoffLocation(models.Model):
     # Regular Django fields corresponding to the attributes in dropoff_locations.csv
+    first_name = models.CharField(max_length=100)
+    last_name = models.CharField(max_length=100)
     neighborhood_name = models.CharField(max_length=100, blank=True)
     location_name = models.CharField(max_length=100, blank=True)
     location_description = models.CharField(max_length=1000, blank=True)
@@ -58,6 +60,7 @@ class CorrectDropoffLocation(models.Model):
     # GeoDjango-specific: a geometry field (MultiPolygonField)
     point = models.PointField(srid=4326, default=None, null=True, blank=True)
     city = models.CharField(max_length=100, default=None, null=True, blank=True)
+    status = models.CharField(max_length=100, default="Awaiting Review", name='status')
 
     # Returns the string representation of the model.
     def __str__(self):

@@ -109,7 +109,7 @@ class CorrectDropoffLocationForm(ModelForm):
     id = IntegerField()
     class Meta:
         model = CorrectDropoffLocation
-        fields = ['id', 'location_name','location_description','location_address', 'neighborhood_name', 'city', 'phone','website','longitude','latitude']
+        fields = ['id', 'first_name', 'last_name', 'location_name','location_description','location_address', 'neighborhood_name', 'city', 'phone','website','longitude','latitude']
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -119,6 +119,7 @@ class CorrectDropoffLocationForm(ModelForm):
 
         self.helper.layout = Layout(
             Div('id'),
+            Div(Column('first_name', css_class='col-6'), Column('last_name', css_class='col-6'), css_class='row'),
             Div(Column('location_name', css_class='col-4'), Column('location_address', css_class='col-8'), css_class='row'),
             'location_description',
             Div(Column('neighborhood_name', css_class='col-6'), Column('city', css_class='col-6'), css_class='row'),

@@ -52,9 +52,10 @@
                                 <li><a class="dropdown-item" href="{% url 'my_sites' %}">Manage My Sites</a></li>
                             {% if perms.dropoff_locations.add_dropofflocation %}
                                 <li><a class="dropdown-item" href="{% url 'add_location' %}">Add a New Drop-off Location</a></li>
+                                <li><a class="dropdown-item" href="{% url 'review_suggested_locations' %}">Review Suggested Drop-off Sites</a></li>
+                                <li><a class="dropdown-item" href="{% url 'review_suggested_corrections' %}">Review Suggested Drop-off Site Corrections</a></li>
                             {% endif %}
                             {% if perms.managers.change_managerprofile %}
-                                <li><a class="dropdown-item" href="{% url 'review_suggested_locations' %}">Review Suggested Drop-off Sites</a></li>
                                 <li><a class="dropdown-item" href="{% url 'update_site_managers' %}">Update Site Management Permissions</a></li>
                             {% else %}
                                 <li><a class="dropdown-item" href="{% url 'request_management_permission' %}">Request Permission to Manage a Site</a></li>

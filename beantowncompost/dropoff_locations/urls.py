@@ -12,5 +12,6 @@ urlpatterns = [
     path('update_site_managers/', views.update_site_managers, name='update_site_managers'),
     path('request_management_permission/', views.request_management_permission, name='request_management_permission'),
     path('review_suggested_locations/', views.review_suggested_locations, name='review_suggested_locations'),
+    path('review_suggested_corrections/', views.review_suggested_corrections, name='review_suggested_corrections'),
     path('locations/', views.locations),
 ]
