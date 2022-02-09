@@ -1,8 +1,7 @@
 # Beantown Compost
 
 Beantown Compost is a crowdsourced map of drop-off composting locations in the Greater Boston Area. 
-There are tools for users to submit corrections to existing locations, submit additional locations, and vote for new locations, 
-as well as a user management system for site managers to request and receive permission to update site details directly.
+There are tools for users to submit additional locations, submit corrections to existing locations, and vote for new locations. There is a user login system for site managers to request and receive permission to update site details directly.
 
 ![Beantown Compost](https://raw.githubusercontent.com/tal-z/BeantownCompost/master/BeantownCompost.PNG)
 
