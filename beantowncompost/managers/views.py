@@ -23,7 +23,7 @@ def register(request):
 
 @login_required
 def my_sites(request):
-    site_permissions = ManagerSitePermission.objects.filter(user=request.user)
+    site_permissions = ManagerSitePermission.objects.filter(user=request.user, status="active")
     dropoffs = [perm.site for perm in site_permissions]
     map = get_map(dropoffs)
     map_html = map._repr_html_()
