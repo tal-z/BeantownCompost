@@ -7,7 +7,7 @@ from django.contrib.auth.models import User
 
 class TestUrls(TestCase):
     def setUp(self):
-        user = User.objects.create(username='test_ProjectManager')
+        user = User.objects.create_user(username='test_ProjectManager')
         user.set_password('SayCompost')
         user.save()
         self.client = Client()
