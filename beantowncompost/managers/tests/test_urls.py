@@ -1,13 +1,12 @@
-from django.test import SimpleTestCase, Client, TestCase
+from django.test import Client, TestCase
 from django.urls import reverse, resolve
 from managers import views as managers_views 
-from managers.forms import LoginForm
 from django.contrib.auth import views as auth_views
 from django.contrib.auth.models import User
 
 class TestUrls(TestCase):
     def setUp(self):
-        user = User.objects.create_user(username='test_ProjectManager')
+        user = User.objects.create_user(username='test_ProjectManager', email='fake@email.com')
         user.set_password('SayCompost')
         user.save()
         self.client = Client()
@@ -52,10 +51,13 @@ class TestUrls(TestCase):
         url = reverse('password_reset_done')
         self.assertEquals(resolve(url).func.view_class, auth_views.PasswordResetDoneView)
     
-    #def test_password_reset_confirm_url_resolves(self):
-    #    url = reverse('password_reset_confirm')
-    #    self.assertEquals(resolve(url).func.view_class, auth_views.PasswordResetConfirmView)
-    
+    def test_password_reset_confirm_url_resolves(self):
+        response = self.client.post(reverse('password_reset'), data={'email':'fake@email.com'})
+        token = response.context[0]['token']
+        uid = response.context[0]['uid']
+        url = reverse('password_reset_confirm', kwargs={'token':token,'uidb64':uid})
+        self.assertEquals(resolve(url).func.view_class, auth_views.PasswordResetConfirmView)
+
     def test_password_reset_complete_url_resolves(self):
         url = reverse('password_reset_complete')
         self.assertEquals(resolve(url).func.view_class, auth_views.PasswordResetCompleteView)
