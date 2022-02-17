@@ -1,8 +1,10 @@
 {% extends 'base.html'%}
 {% load crispy_forms_tags %}
+
 {% block title %}
 My Sites
 {% endblock title %}
+
 {% block header %}
 Hello, {{ user.username|default:'Guest' }}!
 {% endblock header %}
