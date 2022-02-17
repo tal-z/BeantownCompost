@@ -36,7 +36,7 @@
                         <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDropdownMenuLink">
                             <li><a class="dropdown-item" href="{% url 'suggest_location' %}">Suggest an Additional Compost Drop-off</a></li>
                             <li><a class="dropdown-item" href="/locations">Suggest a Correction to the Map</a></li>
-                            <li><a class="dropdown-item" href="/vote">Vote for a New Drop-off Location</a></li>
+                            <li><a class="dropdown-item" href="{% url 'vote' %}">Vote for a New Drop-off Location</a></li>
                         {% if not user.is_authenticated %}
                             <li><a class="dropdown-item" href="{% url 'login' %}">👤 Managers Login</a></li>
                         {% endif %}
