@@ -1,4 +1,3 @@
-from http import client
 from django.test import TestCase, Client
 from django.urls import reverse
 from managers.models import ManagerSitePermission
@@ -20,6 +19,7 @@ class TestViews(TestCase):
         response = self.client.get(self.register_url)
         self.assertEquals(response.status_code, 200)
         self.assertTemplateUsed(response, 'managers/auth/register.html')
+        self.assertTemplateUsed(response, 'base.html')
 
     
     def test_managers_register_POST(self):
@@ -44,6 +44,7 @@ class TestViews(TestCase):
         response = self.client.get(self.my_sites_url)
         self.assertEquals(response.status_code, 200)
         self.assertTemplateUsed(response, 'managers/my_sites.html')
+        self.assertTemplateUsed(response, 'base.html')
 
 
     def test_managers_my_account_unauthenticated_GET(self):
@@ -57,5 +58,12 @@ class TestViews(TestCase):
         response = self.client.get(self.my_account_url)
         self.assertEquals(response.status_code, 200)
         self.assertTemplateUsed(response, 'managers/my_account.html')
+        self.assertTemplateUsed(response, 'base.html')
 
+    def test_login_POST(self):
+        self.client.logout()
+        from beantowncompost.settings import LOGIN_REDIRECT_URL
+        response = self.client.post(reverse('login'), data={"username":"test_ProjectManager", "password":"SayCompost"})
+        self.assertEquals(response.status_code, 302)
+        self.assertEquals(response.url, reverse(LOGIN_REDIRECT_URL))
 

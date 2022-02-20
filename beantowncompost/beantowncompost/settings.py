@@ -140,7 +140,7 @@ GEOS_LIBRARY_PATH = r"C:\OSGeo4W\bin\geos_c.dll"
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
-LOGIN_REDIRECT_URL = 'home'
+LOGIN_REDIRECT_URL = 'index'
 LOGIN_URL = 'login'
 
 

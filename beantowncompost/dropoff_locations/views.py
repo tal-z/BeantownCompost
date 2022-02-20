@@ -62,6 +62,13 @@ def vote(request):
     form = VoteDropoffLocationForm()
     return render(request, 'dropoff_locations/vote.html', {'map': map_html, 'map_id': map_id, 'form': form})
 
+def locations(request):
+    locations = DropoffLocation.objects.all().order_by('location_name')
+    map = get_map(locations)
+    map_html = map._repr_html_()
+    map_id = map.get_name()
+    return render(request, 'dropoff_locations/locations.html', {'map': map_html, 'map_id': map_id, 'locations': locations})
+
 
 def suggest_location(request):
     if request.method == 'POST':
@@ -125,13 +132,6 @@ def update_location(request):
     form = UpdateDropoffLocationForm(instance=dropoff)
     return render(request, 'dropoff_locations/update_location.html', {'map': map_html, 'map_id': map_id, 'form': form, 'dropoff': dropoff})
 
-
-def locations(request):
-    locations = DropoffLocation.objects.all().order_by('location_name')
-    map = get_map(locations)
-    map_html = map._repr_html_()
-    map_id = map.get_name()
-    return render(request, 'dropoff_locations/locations.html', {'map': map_html, 'map_id': map_id, 'locations': locations})
 
 
 
