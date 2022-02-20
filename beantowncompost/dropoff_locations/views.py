@@ -87,23 +87,26 @@ def suggest_location(request):
 def correct_location(request):
     if request.method == 'POST':
         form = CorrectDropoffLocationForm(request.POST)
-        print(form)
         if form.is_valid():
             form.save()
-            return render(request, 'dropoff_locations/thanks.html', {'action': 'submitting your correction'})
+            return render(request, 'dropoff_locations/thanks.html', {'action': 'submitting a correction'})
         messages.warning(request, "Uh oh! There was a problem with your form submission. Check the fields and try again!")
-    dropoff = DropoffLocation.objects.get(pk=request.GET.get('id', None))
-    if request.user.is_authenticated:
+        return redirect('locations')
+    if 'id' in request.GET:
         id = int(request.GET.get('id'))
-        site_permissions = ManagerSitePermission.objects.filter(user=request.user)
-        if id in {perm.site.id for perm in site_permissions}:
-            messages.info(request, "Hey there! It looks like you're the manager for this site, so you have permission to update the map yourself. This is a heads up that your changes will be made live immediately. If you want to submit a correction for review instead, log out and click the 'Submit a Correction' button.")
-            return redirect(f'/update_location/?id={dropoff.id}')
-    map = get_map([dropoff], start_coords=(dropoff.latitude, dropoff.longitude))
-    map_html = map._repr_html_()
-    map_id = map.get_name()
-    form = CorrectDropoffLocationForm(instance=dropoff)
-    return render(request, 'dropoff_locations/correct_location.html', {'map': map_html, 'map_id': map_id, 'form': form, 'dropoff': dropoff})
+        dropoff = DropoffLocation.objects.get(pk=id)
+        if request.user.is_authenticated:
+            site_permissions = ManagerSitePermission.objects.filter(user=request.user)
+            if id in {perm.site.id for perm in site_permissions}:
+                messages.info(request, "Hey there! It looks like you're the manager for this site, so you have permission to update the map yourself. This is a heads up that your changes will be made live immediately. If you want to submit a correction for review instead, log out and click the 'Submit a Correction' button.")
+                return redirect(f'/update_location/?id={dropoff.id}')
+        map = get_map([dropoff], start_coords=(dropoff.latitude, dropoff.longitude))
+        map_html = map._repr_html_()
+        map_id = map.get_name()
+        form = CorrectDropoffLocationForm(instance=dropoff)
+        return render(request, 'dropoff_locations/correct_location.html', {'map': map_html, 'map_id': map_id, 'form': form, 'dropoff': dropoff})
+    messages.info(request, "Whoopsy daisy! It looks like you forgot to supply a location to correct. Please click a site on the list below to submit a correction.")
+    return redirect('locations')
 
 
 @login_required
